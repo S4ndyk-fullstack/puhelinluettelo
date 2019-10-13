@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 const App = (props) => {
-    const [persons, setPersons] = useState(props.persons)
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [search, setSearch] = useState('')
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/persons')
+            .then((res) => setPersons(res.data))
+    }, [])
 
     return (
         <div>
@@ -76,19 +82,5 @@ const Number = ({person}) => <li>{person.name} {person.number}</li>
 
 const Header = ({ title }) => <h2>{title}</h2>
 
-const persons = [
-    {
-        id: 1,
-        name: 'Arto Hellas',
-        number: '050488114'
-    },
-    {
-        id: 2,
-        name: 'Matti Luukkainen',
-        number: '040551821'
-    }
-
-]
-
-ReactDOM.render(<App persons={persons} />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
  
