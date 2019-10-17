@@ -7,6 +7,9 @@ const App = (props) => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [search, setSearch] = useState('')
+    const [notification, setNotification] = useState(null)
+    const [error, setError] = useState(null)
+
     useEffect(() => {
         personService.getAll()
             .then(data => setPersons(data))
@@ -31,7 +34,15 @@ const App = (props) => {
 
     const addPerson = (newPerson) => {
         personService.create(newPerson)
-            .then(addedPerson => setPersons(persons.concat(addedPerson)))
+            .then(addedPerson => { 
+                setPersons(persons.concat(addedPerson))
+                setNotification(`Added ${addedPerson.name}`)
+                setTimeout(() => setNotification(null), 3000)
+            })
+            .catch((err) => {
+                setError(`Failed to add ${newPerson.name} due to ${err}`)
+                setTimeout(() => setError(null), 3000)
+            })
         setNewName('')
         setNewNumber('')
     }
@@ -39,7 +50,15 @@ const App = (props) => {
     const removePerson = (person) => {
         if (window.confirm(`Delete ${person.name}?`)) {
             personService.remove(person.id)
-                .then(res => setPersons(persons.filter(nextPerson => nextPerson.id !== person.id)))
+                .then(() => {
+                    setPersons(persons.filter(nextPerson => nextPerson.id !== person.id))
+                    setNotification(`Removed ${person.name}`)
+                    setTimeout(() => setNotification(null), 3000)
+                })
+                .catch((err) => {
+                    setError(`Failed to remove ${person.name} due to ${err}`)
+                    setTimeout(() => setError(null), 3000)
+                })
         }
     }
 
@@ -50,7 +69,15 @@ const App = (props) => {
             number: newNumber
         }
         personService.update(person.id, newPerson)
-            .then(returnedPerson => setPersons(persons.map(nextPerson => nextPerson.id === person.id ? returnedPerson : nextPerson)))
+            .then(returnedPerson => {
+                setPersons(persons.map(nextPerson => nextPerson.id === person.id ? returnedPerson : nextPerson))
+                setNotification(`Updated ${returnedPerson.name}`)
+                setTimeout(() => setNotification(null), 3000)
+            })
+            .catch((err) => {
+                setError(`Failed to replace ${person.name} due to ${err}`)
+                setTimeout(() => setError(null), 3000)
+            })
         setNewName('')
         setNewNumber('')
     }
@@ -58,6 +85,8 @@ const App = (props) => {
     return (
         <div>
             <Header title='Phonebook' />
+            <Notification message={notification} />
+            <Error message={error} />
             <Input text='filter shown with ' value={search} set={setSearch} />
             <Header title='Add a new' />
             <Form
@@ -108,6 +137,45 @@ const Number = ({ person, removePerson }) => {
         </li>
     )
 }
+
+const Notification = ({ message }) => {
+    const style = {
+        color: 'green',
+        background: 'lightgrey',
+        fontSize: '20px',
+        borderStyle: 'solid',
+        borderRadius: '5px',
+        padding: '10px',
+        marginBottom: '10px'
+    }
+
+    if (message === null) return null
+    return (
+        <div style={style}>
+            {message}
+        </div>
+    )
+}
+
+const Error = ({ message }) => {
+    const style = {
+        color: 'red',
+        background: 'lightgrey',
+        fontSize: '20px',
+        borderStyle: 'solid',
+        borderRadius: '5px',
+        padding: '10px',
+        marginBottom: '10px'
+    }
+
+    if (message === null) return null
+    return (
+        <div style={style}>
+            {message}
+        </div>
+    )
+}
+
 
 const Header = ({ title }) => <h2>{title}</h2>
 

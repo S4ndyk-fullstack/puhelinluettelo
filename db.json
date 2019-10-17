@@ -1,29 +1,14 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "123-123123",
-      "id": 2
-    },
-    {
       "name": "Dan Abramov",
       "number": "456-123123",
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
       "name": "Alan Turing",
-      "number": "123-667799",
+      "number": "123-556677",
       "id": 4739
-    },
-    {
-      "name": "Santtu Lempinen",
-      "number": "123-123123",
-      "id": 2713
     },
     {
       "name": "John von Neumann",
@@ -31,9 +16,9 @@
       "id": 1120
     },
     {
-      "name": "Matti Luukkainen",
-      "number": "123-567567",
-      "id": 7525
+      "name": "Juha Tauriainen",
+      "number": "123-123123",
+      "id": 7694
     }
   ]
 }
